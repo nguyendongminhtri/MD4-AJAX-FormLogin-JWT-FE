@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.css"/>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        function redirectUserAccount() {
+            $("#user-account").load("file-html/form-login/user-account.html");
+        }
+    </script>
+
+</head>
+<body>
+
+<div id="login">
+    <h3 class="text-center text-white pt-5">Login form</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <!--                    <form id="login-form" class="form"  method="post">-->
+                    <h3 class="text-center text-info">Login</h3>
+                    <div class="form-group">
+                        <label for="username" class="text-info">Username:</label><br>
+                        <input type="text" name="username" id="username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="text-info">Password:</label><br>
+                        <input type="text" name="password" id="password" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
+                        <button type="submit"  class="btn btn-info btn-md" id="btn-login">Login</button>
+                    </div>
+                    <div id="register-link" class="text-right">
+                        <a href="#" class="text-info">Register here</a>
+                    </div>
+                    <!--                    </form>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type = "text/javascript">
+    $(document).ready(function () {
+        let signInform = {};
+        $('#btn-login').click(function () {
+            signInform.username = $('#username').val();
+            console.log('producer', signInform.username)
+            signInform.password = $('#password').val();
+            console.log('producer', signInform.password)
+            console.log('signInForm -->',signInform)
+            let signInFormObj = JSON.stringify(signInform);
+            console.log('signInFormObj == ', signInFormObj)
+            $.ajax({
+                url: 'http://localhost:8080/signin',
+                // method: po,
+                method: 'POST',
+                data: signInFormObj,
+                // dataType: "html",
+                contentType: 'application/json; charset=utf-8',
+
+                success: function (data) {
+                    console.log('jwtResponse', data)
+                    // window.sessionStorage.removeItem('TOKEN_KEY',data.token)
+                    window.sessionStorage.setItem('TOKEN_KEY',data.token);
+                    // window.sessionStorage.removeItem('NAME_KEY', data.name);
+                    window.sessionStorage.setItem('NAME_KEY', data.name);
+                    // window.sessionStorage.removeItem('AVATAR_KEY',data.avatar);
+                    window.sessionStorage.setItem('AVATAR_KEY',data.avatar);
+                    // window.sessionStorage.removeItem('ROLE_KEY',JSON.stringify(data.roles));
+                    window.sessionStorage.setItem('ROLE_KEY',JSON.stringify(data.roles));
+                    window.location.href = 'user-account.html';
+
+                },
+                error: function (error) {
+                    // console.log('error',error)
+                    // alert(error);
+                }
+            })
+        })
+    })
+
+</script>
+
+</body>
+
+</html>
